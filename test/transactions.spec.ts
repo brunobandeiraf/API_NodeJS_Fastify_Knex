@@ -1,4 +1,5 @@
-import { afterAll, beforeAll, it, describe, expect } from 'vitest'
+import { afterAll, beforeAll, it, describe, expect,beforeEach } from 'vitest'
+import { execSync } from 'node:child_process'
 import request from 'supertest'
 import { app } from '../src/app'
 
@@ -17,6 +18,13 @@ describe('Transactions routes', () =>{
     afterAll(async () => {
         await app.close()
     })
+
+    //execSync permite executar comandos nodes no terminal
+    //Antes de começar os testes eu apago o banco e executo tudo de novo
+    beforeEach(() => {
+        execSync('npm run knex migrate:rollback --all')
+        execSync('npm run knex migrate:latest')
+      })
 
     //Deve ser possível criar uma nova transação
     it('should be able to create a new transaction', async () => {

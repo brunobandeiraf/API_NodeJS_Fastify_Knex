@@ -1,5 +1,12 @@
-import 'dotenv/config'
+import { config } from 'dotenv'
 import { z } from 'zod'
+
+//Se a variável de ambiente for test, será executado o ambiente de teste
+if (process.env.NODE_ENV === 'test') {
+  config({ path: '.env.test' })
+} else {
+  config()
+}
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('production'),
